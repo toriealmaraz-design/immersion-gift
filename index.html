@@ -12,16 +12,37 @@
 </head>
 <body>
 
-<!-- ═══ ONSCREEN 3D ENTRY (the scannable gateway — replaced by Three.js scene) ═══ -->
+<!-- ═══ QR CODE MODAL (scannable link — open from WhatsApp / text) ═══ -->
+<div class="qr-modal-backdrop" id="qrModal" hidden aria-hidden="true">
+  <div class="qr-modal" role="dialog" aria-modal="true" aria-label="Scannable link">
+    <div class="qr-title">A Galaxy of Love for You</div>
+    <div class="qr-sub">Scan this code to open the gift</div>
+    <div class="qr-panel">
+      <img id="qrCodeImg" src="assets/images/qr-code.png" alt="QR code linking to the gift" />
+    </div>
+    <p class="qr-copy" id="qrUrlCopy">https://toriealmaraz-design.github.io/immersion-gift/</p>
+    <div class="qr-actions">
+      <button class="btn" id="qrOpenBtn">Open the gift</button>
+      <button class="btn btn-outline" id="qrCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ONSCREEN 3D ENTRY (the scannable gateway) ═══ -->
 <div class="entry-overlay" id="entryOverlay" aria-label="3D entry gateway">
   <div class="entry-stardust" aria-hidden="true">
     <span></span><span></span><span></span><span></span><span></span>
     <span></span><span></span><span></span><span></span>
   </div>
-  <div class="entry-card glass">
+  <div class="entry-card glass" id="entryCard">
     <div class="entry-title glow">A Galaxy of Love for You</div>
     <div class="entry-sub">Happy Birthday, My Love</div>
-    <button class="btn" id="openUniverse">Step Into the Universe</button>
+    <div style="margin-top: var(--space-4); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap;">
+      <button class="btn" id="openUniverse">Step Into the Universe</button>
+      <p style="margin: 0; font-size: 0.85rem; color: var(--ink-muted);">
+        Tap also <a href="#" id="openQRFromMobile" style="color: var(--pink); font-weight: 600; text-decoration: underline;">View the gift</a>
+      </p>
+    </div>
   </div>
 </div>
 
