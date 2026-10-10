@@ -1,0 +1,20 @@
+# Immersion Gift — gitignore
+
+# Local media never committed
+assets/audio/
+assets/images/
+assets/videos/
+
+# OS files
+Thumbs.db
+Thumb.db
+.DS_Store
+
+# Editor / OS temp
+*.swp
+*~
+.DS_Store
+
+# Node local
+node_modules/
+npm-debug.log*

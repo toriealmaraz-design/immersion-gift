@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Love Letters — Immersion Gift</title>
+  <meta name="description" content="A private collection of love letters, one for every emotional milestone." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.stylesheet.css" />
+</head>
+<body>
+
+<!-- ═══ LETTER CARDS (vintage envelopes) ══════════════════════════════ -->
+<section class="letters" id="letters">
+  <div class="wrap">
+    <div class="page-head">
+      <p class="eyebrow">Love Letters</p>
+      <h1>Letters, just for you</h1>
+      <p class="intro-sub">Three letters for three moments. Open each one when it belongs to you.</p>
+    </div>
+
+    <div class="envelope-grid">
+
+      <!-- Letter 1 ─── To My Best Friend & Love ─── -->
+      <article class="envelope-card reveal" data-delay="1" tabindex="0" role="button" aria-label="Open letter: To My Best Friend & Love">
+        <div class="envelope-front">
+          <span class="envelope-seal">♡</span>
+        </div>
+        <div class="envelope-back">
+          <span class="envelope-date">Day One</span>
+          <span class="envelope-title">To My Best Friend &amp; Love</span>
+          <span class="envelope-snippet">The daily bonds and the moments that never made it to words.</span>
+        </div>
+        <div class="envelope-shine"></div>
+      </article>
+
+      <!-- Letter 2 ─── Looking Back at Us ─── -->
+      <article class="envelope-card reveal" data-delay="2" tabindex="0" role="button" aria-label="Open letter: Looking Back at Us">
+        <div class="envelope-front">
+          <span class="envelope-seal">♡</span>
+        </div>
+        <div class="envelope-back">
+          <span class="envelope-date">Day Two</span>
+          <span class="envelope-title">Looking Back at Us</span>
+          <span class="envelope-snippet">Growth, inside jokes, and the memories we built together.</span>
+        </div>
+        <div class="envelope-shine"></div>
+      </article>
+
+      <!-- Letter 3 ─── For the Future ─── -->
+      <article class="envelope-card reveal" data-delay="3" tabindex="0" role="button" aria-label="Open letter: For the Future">
+        <div class="envelope-front">
+          <span class="envelope-seal">♡</span>
+        </div>
+        <div class="envelope-back">
+          <span class="envelope-date">Day Three</span>
+          <span class="envelope-title">For the Future</span>
+          <span class="envelope-snippet">Long-term aspirations and unwavering support, always.</span>
+        </div>
+        <div class="envelope-shine"></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ READING MODAL ════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="letterModal" hidden aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Letter reading view">
+    <div class="modal-header">
+      <button class="modal-close" id="letterClose" aria-label="Close letter">&times;</button>
+      <button class="modal-pin" id="letterPin" aria-label="Pin this letter">☆</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-eyebrow">Letter One</p>
+      <h2 class="modal-title">To My Best Friend &amp; Love</h2>
+      <div class="modal-date">Day One</div>
+      <div class="letter-body">
+        <blockquote class="letter-quote">
+          “Some days you just want someone to look at you and see everything you are.”
+        </blockquote>
+        <p>
+          I didn&rsquo;t know how to tell you this face-to-face. Not because I
+          didn&rsquo;t want to &mdash; but because some things feel bigger in
+          writing. They settle. They wait for you to come back to them.
+        </p>
+        <p>
+          You make ordinary days feel like they&rsquo;re happening inside a
+          story I want to keep turning. From the way you laugh at your own
+          jokes to the quiet, certain ways you show up, I&rsquo;m paying
+          attention. I always have.
+        </p>
+        <p>
+          You don&rsquo;t have to try with me. You can be exactly as you are
+          &mdash; loud in the kitchen, quiet on the couch, completely yourself
+          &mdash; and I&rsquo;ll still be here, holding the door. You&rsquo;ve
+          made my life softer and brighter just by being in it.
+        </p>
+        <p>
+          I could send you a hundred birthday gifts and none of them would
+          say it the way this does. Not the flowers, not the cards, not the
+          things that fade. The truth is the only thing that lasts, and this
+          is my truth.
+        </p>
+        <p>
+          Thank you for being you &mdash; for the way you are in this world
+          and in my chest. I hope you know how much you are loved, how deeply,
+          and for as long as I&rsquo;m here to say it. I hope this day is as
+          warm and bright as you are.
+        </p>
+        <hr class="letter-rule" />
+        <p class="letter-sign"><span class="signature">I love you,</span><br>Yours,<br>[Your Name]</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NAV DOCK ══════════════════════════════════════════════════════ -->
+<nav class="nav-dock" aria-label="Letters navigation">
+  <a href="index.html" class="nav-item" data-page="universe">
+    <span class="nav-icon">✦</span><span class="nav-label">Universe</span>
+  </a>
+  <a href="letters.html" class="nav-item active" data-page="letters">
+    <span class="nav-icon">✉</span><span class="nav-label">Letters</span>
+  </a>
+  <a href="memories.html" class="nav-item" data-page="memories">
+    <span class="nav-icon">◈</span><span class="nav-label">Memories</span>
+  </a>
+</nav>
+
+<script src="js/audio-player.js"></script>
+<script src="js/letters.js"></script>
+</body>
+</html>

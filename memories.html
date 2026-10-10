@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memories Vault — Immersion Gift</title>
+  <meta name="description" content="A private multimedia gallery of photos and videos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.stylesheet.css" />
+</head>
+<body>
+
+<!-- ═══ MEMORY GRID ══════════════════════════════════════════════════ -->
+<section class="memories" id="memories">
+  <div class="wrap">
+    <div class="page-head">
+      <p class="eyebrow">Memories Vault</p>
+      <h1>Moments, in one place</h1>
+      <p class="intro-sub">Photos and clips of the life we&rsquo;ve built &mdash; private, and just for you.</p>
+    </div>
+
+    <div class="memory-grid">
+
+      <!-- Photo ─── -->
+      <figure class="memory-item reveal" data-delay="1" tabindex="0" role="button" aria-label="Open memory: photo — the day we met">
+        <img src="assets/images/photo-1.jpg" alt="The day we met" loading="lazy" />
+        <div class="memory-caption">
+          <strong>The Day We Met</strong>
+          <span>How it all began &mdash; the day we said &ldquo;hello&rdquo;</span>
+        </div>
+        <div class="memory-zoom"></div>
+      </figure>
+
+      <!-- Photo ─── -->
+      <figure class="memory-item reveal" data-delay="2" tabindex="0" role="button" aria-label="Open memory: photo — a love moment">
+        <img src="assets/images/photo-2.jpg" alt="A love moment" loading="lazy" />
+        <div class="memory-caption">
+          <strong>A Love Moment</strong>
+          <span>The way you look at me when you think I&rsquo;m not watching</span>
+        </div>
+        <div class="memory-zoom"></div>
+      </figure>
+
+      <!-- Video ─── -->
+      <video class="memory-item reveal" data-delay="3" tabindex="0" role="button" aria-label="Open memory: video — our trip">
+        <source src="assets/videos/video-1.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="memory-caption">
+        <strong>Our Trip</strong>
+        <span>Sun, sea, and the exact moment I realized you were mine</span>
+      </div>
+      <div class="memory-zoom"></div>
+
+      <!-- Photo ─── -->
+      <figure class="memory-item reveal" data-delay="4" tabindex="0" role="button" aria-label="Open memory: photo — ordinary Tuesday">
+        <img src="assets/images/photo-3.jpg" alt="Ordinary Tuesday" loading="lazy" />
+        <div class="memory-caption">
+          <strong>Ordinary Tuesday</strong>
+          <span>What made this Tuesday ordinary in the best way</span>
+        </div>
+        <div class="memory-zoom"></div>
+      </figure>
+
+      <!-- Photo ─── -->
+      <figure class="memory-item reveal" data-delay="5" tabindex="0" role="button" aria-label="Open memory: photos">
+        <img src="assets/images/photo-4.jpg" alt="A quiet evening" loading="lazy" />
+        <div class="memory-caption">
+          <strong>A Quiet Evening</strong>
+          <span>The way we still hold hands after all this time</span>
+        </div>
+        <div class="memory-zoom"></div>
+      </figure>
+
+      <!-- Video ─── -->
+      <video class="memory-item reveal" data-delay="6" tabindex="0" role="button" aria-label="Open memory: video — our song">
+        <source src="assets/videos/video-2.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="memory-caption">
+        <strong>Our Song</strong>
+        <span>&ldquo;Adore You&rdquo; &mdash; the song I&rsquo;ll play on repeat forever</span>
+      </div>
+      <div class="memory-zoom"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LIGHTBOX ══════════════════════════════════════════════════════ -->
+<div class="lightbox-backdrop" id="lightbox" hidden aria-hidden="true">
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Full screen lightbox">
+    <div class="lightbox-header">
+      <span class="lightbox-label" id="lightboxCaption">Memory</span>
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+    </div>
+    <div class="lightbox-media" id="lightboxMedia">
+      <!-- Dynamic content injected by JS -->
+    </div>
+    <div class="lightbox-nav">
+      <button class="lightbox-prev" id="lightboxPrev" aria-label="Previous memory">&#10094;</button>
+      <button class="lightbox-next" id="lightboxNext" aria-label="Next memory">&#10095;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NAV DOCK ══════════════════════════════════════════════════════ -->
+<nav class="nav-dock" aria-label="Memories navigation">
+  <a href="index.html" class="nav-item" data-page="universe">
+    <span class="nav-icon">✦</span><span class="nav-label">Universe</span>
+  </a>
+  <a href="letters.html" class="nav-item" data-page="letters">
+    <span class="nav-icon">✉</span><span class="nav-label">Letters</span>
+  </a>
+  <a href="memories.html" class="nav-item active" data-page="memories">
+    <span class="nav-icon">◈</span><span class="nav-label">Memories</span>
+  </a>
+</nav>
+
+<script src="js/audio-player.js"></script>
+<script src="js/memories.js"></script>
+</body>
+</html>
