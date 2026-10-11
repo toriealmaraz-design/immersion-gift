@@ -29,7 +29,7 @@ Three separate, self-contained pages:
 │   ├── memories.js           # Lightbox logic
 │   └── universe.js           # Universe open handler
 ├── assets/
-│   ├── audio/                # Background soundtrack (e.g. adore-you.mp3)
+│   ├── audio/                # Background soundtrack (e.g. (meloaz.com) 120 - Adore You.mp3)
 │   ├── images/               # Photo gallery assets
 │   └── videos/               # Video gallery assets
 ```
@@ -45,7 +45,7 @@ Tokens live in `:root` in `css/main.stylesheet.css` (primitive → semantic laye
 ## Content — Persistent Audio
 
 The blueprint's soundtrack is "Adore You" by Miley Cyrus. Place the audio file at
-`assets/audio/audio.mp3` (or edit `audio-player.js` `TRACK_URL`). The player is
+`assets/audio/(meloaz.com) 120 - Adore You.mp3` (or edit `audio-player.js` `TRACK_URL`). The player is
 mounted in the global root and survives navigation; it does not force-play on load
 (browser autoplay policy). Click the floating music widget to toggle.
 
@@ -93,7 +93,7 @@ The blueprint's soundtrack is "Adore You" by Miley Cyrus. The player (`js/audio-
 player.js`) is mounted in the global root and survives navigation so it never cuts
 off between pages. It does NOT force-play on load (browser autoplay policy):
 
-1. Save the track at `assets/audio/audio.mp3` (or edit `TRACK_URL` in
+1. Save the track at `assets/audio/(meloaz.com) 120 - Adore You.mp3` (or edit `TRACK_URL` in
    `js/audio-player.js`).
 2. Open any page, click the floating music widget (bottom corner, with play/pause
    and animated sound bars) to toggle.

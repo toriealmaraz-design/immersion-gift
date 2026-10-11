@@ -1,11 +1,10 @@
-/**
+/** 
  * Immersion Gift — Global Persistent Audio Player
  * Keeps the background soundtrack mounted across all pages so navigation
  * never interrupts playback (per blueprint §6.2).
  *
- * The track file is placed at assets/audio/audio.mp3 (or any path you set
- * in `trackUrl`). The music widget has a play/pause toggle + animating
- * sound bars, and never forces playback on load (browser autoplay policy).
+ * The track file is placed at assets/audio/. Update TRACK_URL to match
+ * the actual file name in that folder.
  */
 
 (function () {
@@ -13,7 +12,7 @@
 
   // ── Configuration ───────────────────────────────────────────────────
   // Point this at your local track, or a hosted URL.
-  const TRACK_URL = "assets/audio/audio.mp3";
+  const TRACK_URL = "assets/audio/(meloaz.com) 120 - Adore You.mp3";
 
   // ── DOM refs ────────────────────────────────────────────────────────
   const widget = document.createElement("div");
@@ -150,7 +149,7 @@
   audio.addEventListener("error", () => {
     label.textContent = "Adore You · (track not found)";
     toggle.style.opacity = "0.5";
-    toggle.title = "Track not found — set assets/audio/audio.mp3";
+    toggle.title = "Track not found — set the correct filename in assets/audio/";
   });
 
   console.log("🎧 Immersion Gift audio player ready — click the music widget to play.");
