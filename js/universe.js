@@ -71,6 +71,14 @@
     swoosh.style.marginTop = "-60px";
   }, 2400);
 
+  // ---------- Fade out entry overlay + reveal galaxy (4s total) ----------
+  // The entry overlay sits above the galaxy, so we fade it out (display
+  // none) after the entrance animation so the galaxy and its clickable
+  // 3D portals become visible.
+  setTimeout(() => {
+    if (overlay) overlay.style.display = "none";
+  }, 4000);
+
   // ---------- Cleanup on page unload ----------
   window.addEventListener("beforeunload", () => {
     clearTimeout(swoosh.timer);
