@@ -15,8 +15,11 @@
   const SCENE = document.getElementById("galaxyScene");
   if (!SCENE) return;
 
-  // Guard: only build when the node is actually in the document.
-  if (SCENE.isConnected === false) return;
+  // Guard: only build when Three.js is actually loaded.
+  if (typeof THREE === "undefined") {
+    console.error("[3D Galaxy] THREE is undefined — check that js/three.min.js is loaded before three-scene.js");
+    return;
+  }
 
   let renderer, scene, camera, clock, heartGroup, galaxyGroup, starField;
   let floaters = [];
