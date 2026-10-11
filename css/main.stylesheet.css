@@ -907,6 +907,298 @@ em { font-style: italic; }
 }
 .memory-item:hover .memory-zoom { opacity: 0.35; }
 
+
+
+/* ── Interactive 3D Portals ───────────────────────────────────────────── */
+/* Clickable 3D elements that float in the galaxy. Each opens a
+ * letters / memories / extra page through the existing npm navigation. */
+.portal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+.portal-card {
+  position: absolute;
+  pointer-events: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5) var(--space-6);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: 0 12px 48px var(--magenta-glow), inset 0 0 60px rgba(255, 42, 133, 0.08);
+  cursor: pointer;
+  transition: transform var(--duration-soft) var(--ease-soft),
+              box-shadow var(--duration-soft) var(--ease-soft),
+              border-color var(--duration-soft) var(--ease-soft);
+  text-align: center;
+}
+.portal-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 18px 56px var(--pink-glow), inset 0 0 60px rgba(255, 42, 133, 0.18);
+  border-color: var(--hot-magenta);
+}
+.portal-card:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+.portal-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+.portal-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--ink-stardust);
+  line-height: 1.2;
+  margin-bottom: var(--space-2);
+}
+
+.portal-sub {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  font-style: italic;
+  margin-bottom: var(--space-4);
+}
+
+/* ── Portal spheres (3D floating orbs) ──────────────────────────────── */
+.portal-sphere {
+  position: absolute;
+  pointer-events: auto;
+  border-radius: 50%;
+  border: 2px solid var(--pink-border);
+  background: radial-gradient(circle at 35% 30%, var(--pink-glow), transparent 70%);
+  box-shadow: 0 0 24px var(--magenta-glow), 0 0 60px var(--pink-glow);
+  cursor: pointer;
+  transition: transform var(--duration-soft) var(--ease-soft),
+              box-shadow var(--duration-soft) var(--ease-soft);
+}
+.portal-sphere:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 36px var(--pink-glow), 0 0 80px var(--magenta-glow);
+}
+.portal-sphere:focus-visible {
+  outline: 3px solid var(--hot-magenta);
+  outline-offset: 5px;
+}
+
+/* ── 3D portal label floating above sphere ──────────────────────────── */
+.portal-label {
+  position: absolute;
+  pointer-events: none;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+.portal-label .portal-icon {
+  font-size: 1.4rem;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+.portal-label .portal-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-stardust);
+}
+.portal-label .portal-sub {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+}
+
+/* ── Portal entrance animation (cute star-wink scale) ──────────────── */
+@keyframes portalWink {
+  0%   { transform: scale(0.6); opacity: 0; }
+  40%  { transform: scale(1.05); }
+  60%  { transform: scale(0.97); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.portal-card.portal-box {
+  animation: portalWink 3.2s var(--ease-soft) forwards;
+}
+.portal-sphere.portal-dot {
+  animation: portalWink 3.2s var(--ease-soft) forwards;
+}
+
+/* ── Orbiting portal ring (decorative) ──────────────────────────────── */
+.portal-ring {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 1.5px solid var(--pink-border);
+  opacity: 0.3;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+/* ── Right-click prevention on galaxy (no context menu) ─────────────── */
+.galaxy-scene .portal-overlay {
+  pointer-events: none;
+}
+.galaxy-scene {
+  pointer-events: none;
+}
+.galaxy-scene canvas { pointer-events: none; }
+
+
+
+/* ── Interactive 3D Portals ───────────────────────────────────────────── */
+/* Clickable 3D elements that float in the galaxy. Each opens a
+ * letters / memories / extra page through the existing npm navigation. */
+.portal-overlay {
+  position: fixed;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.portal-card {
+  position: relative;
+  pointer-events: auto;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5) var(--space-6);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: 0 12px 48px var(--magenta-glow), inset 0 0 60px rgba(255, 42, 133, 0.08);
+  cursor: pointer;
+  transition: transform var(--duration-soft) var(--ease-soft),
+              box-shadow var(--duration-soft) var(--ease-soft),
+              border-color var(--duration-soft) var(--ease-soft);
+  text-align: center;
+}
+.portal-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 18px 56px var(--pink-glow), inset 0 0 60px rgba(255, 42, 133, 0.18);
+  border-color: var(--hot-magenta);
+}
+.portal-card:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+.portal-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+.portal-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--ink-stardust);
+  line-height: 1.2;
+  margin-bottom: var(--space-2);
+}
+
+.portal-sub {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  font-style: italic;
+  margin-bottom: var(--space-4);
+}
+
+/* ── Portal sphere (3D floating orb) ──────────────────────────────── */
+.portal-sphere {
+  position: absolute;
+  pointer-events: auto;
+  border-radius: 50%;
+  border: 2px solid var(--pink-border);
+  background: radial-gradient(circle at 35% 30%, var(--pink-glow), transparent 70%);
+  box-shadow: 0 0 24px var(--magenta-glow), 0 0 60px var(--pink-glow);
+  cursor: pointer;
+  transition: transform var(--duration-soft) var(--ease-soft),
+              box-shadow var(--duration-soft) var(--ease-soft);
+}
+.portal-sphere:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 36px var(--pink-glow), 0 0 80px var(--magenta-glow);
+}
+.portal-sphere:focus-visible {
+  outline: 3px solid var(--hot-magenta);
+  outline-offset: 5px;
+}
+
+/* ── 3D portal label floating above sphere ──────────────────────────── */
+.portal-label {
+  position: absolute;
+  pointer-events: none;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+.portal-label .portal-icon {
+  font-size: 1.4rem;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+.portal-label .portal-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-stardust);
+}
+.portal-label .portal-sub {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+}
+
+/* ── Portal entrance animation (cute star-wink scale) ──────────────── */
+@keyframes portalWink {
+  0%   { transform: scale(0.6); opacity: 0; }
+  40%  { transform: scale(1.05); }
+  60%  { transform: scale(0.97); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.portal-card.portal-box {
+  animation: portalWink 3.2s var(--ease-soft) forwards;
+}
+.portal-sphere.portal-dot {
+  animation: portalWink 3.2s var(--ease-soft) forwards;
+}
+
+/* ── Orbiting portal ring (decorative) ──────────────────────────────── */
+.portal-ring {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 1.5px solid var(--pink-border);
+  opacity: 0.3;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+/* ── Right-click prevention on galaxy (no context menu) ─────────────── */
+.galaxy-scene .portal-overlay {
+  pointer-events: none;
+}
+.galaxy-scene {
+  pointer-events: none;
+}
+.galaxy-scene canvas { pointer-events: none; }
 /* ── Responsive ─────────────────────────────────────────────────────── */
 @media (max-width: 720px) {
   .galaxy-scene { background: radial-gradient(ellipse at 50% 50%, var(--bg-primary-2) 0%, var(--bg-deep) 70%, var(--bg-deep) 100%); }

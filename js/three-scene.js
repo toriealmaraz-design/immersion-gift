@@ -20,6 +20,8 @@
 
   let renderer, scene, camera, clock, heartGroup, galaxyGroup, starField;
   let floaters = [];
+  let portalSpheres = [];
+  let portalRings = [];
   let rafId = null;
   let running = true;
   let time = 0;
@@ -223,6 +225,99 @@
     return items;
   }
 
+  // ── Interactive 3D Portals ──────────────────────────────────────────
+
+  // Build a 3D sphere the user can click. Creates an HTML overlay that sits
+  // on top of the galaxy canvas at a screen-space position matching the
+  // 3D position. Launches a target page when clicked / tapped.
+  function buildPortalSphere({ icon, title, sub, page, offset, scale, color }) {
+    const geo = new THREE.SphereGeometry(0.18 * scale, 32, 32);
+    const params = new THREE.MeshStandardMaterial({
+      color: color,
+      emissive: color,
+      emissiveIntensity: 0.5,
+      metalness: 0.2,
+      roughness: 0.35,
+      transparent: true,
+      opacity: 0.92,
+      depthWrite: false,
+    });
+    const sphere = new THREE.Mesh(geo, params);
+    sphere.position.set(offset.x, offset.y, offset.z);
+    sphere.userData = {
+      type: "portal",
+      icon, title, sub, page,
+      overlay: null,
+      scale,
+    };
+    SCENE.add(sphere);
+    return sphere;
+  }
+
+  // Build a small 3D indicator ring that orbits around a portal sphere
+  // (decorative, not clickable).
+  function buildPortalRing({ center, radius, color, speed }) {
+    const geo = new THREE.RingGeometry(radius * 0.5, radius, 48);
+    const mat = new THREE.MeshBasicMaterial({
+      color: color,
+      transparent: true,
+      opacity: 0.35,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const ring = new THREE.Mesh(geo, mat);
+    ring.rotation.x = Math.PI / 2;
+    ring.userData = { center, radius, color, speed, angle: 0 };
+    SCENE.add(ring);
+    return ring;
+  }
+
+  // Project a 3D world position to screen coordinates relative to the
+  // galaxy scene container (for positioning HTML overlays).
+  function projectToScreen(vector) {
+    const vec = vector.clone().unproject(camera);
+    const x = (vec.x * camera.position.z) / vec.z;
+    const y = (vec.y * camera.position.z) / vec.z;
+    const w = SCENE.clientWidth;
+    const h = SCENE.clientHeight;
+    return { x: (x + 1) * w / 2, y: (y + 1) * h / 2 };
+  }
+
+  // Build click-handler on the galaxy scene and the full document.
+  // Portal HTML overlays live outside the canvas, so we search the
+  // document (not just the canvas) for portal overlays.
+  function bindGalaxyClick() {
+    const handler = (e) => {
+      const touch = e.touches ? e.touches[0] : e;
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      let node = el;
+      while (node) {
+        if (node.classList && node.classList.contains("portal-overlay")) {
+          const card = node.querySelector(".portal-card");
+          if (card) {
+            const data = card.dataset;
+            if (data && data.page) {
+              window.openPage(data.page, {
+                icon: card.querySelector(".portal-icon")?.textContent || "",
+                title: card.querySelector(".portal-title")?.textContent || "",
+                sub: card.querySelector(".portal-sub")?.textContent || "",
+              });
+            }
+            break;
+          }
+          break;
+        }
+        node = node.parentElement;
+      }
+    };
+
+    // Mouse events
+    SCENE.addEventListener("click", handler);
+
+    // Touch events for mobile
+    SCENE.addEventListener("touchstart", handler, { passive: true });
+  }
+
   // ── Initialisation ──────────────────────────────────────────────────
 
   function init() {
@@ -314,6 +409,142 @@
     // Floaters
     floaters = buildFloaters();
 
+    // ── Interactive 3D Portals ───────────────────────────────────────
+    // A ring of 3 clickable portals around the galaxy:
+    //   ✉ Letters  |  ◈ Memories  |  ✦ Explore more
+    // Each is a glowing 3D sphere floating in the galaxy.
+    const portalConfigs = [
+      {
+        icon: "✉",
+        title: "Love Letters",
+        sub: "Open a letter",
+        page: "letters.html",
+        offset: { x: 0, y: 1.6, z: 1.6 },
+        scale: 1,
+        color: 0xff2a85,
+      },
+      {
+        icon: "◈",
+        title: "Memories Vault",
+        sub: "Open a memory",
+        page: "memories.html",
+        offset: { x: 1.6, y: -1.4, z: 1.4 },
+        scale: 1,
+        color: 0xff1493,
+      },
+      {
+        icon: "✦",
+        title: "Explore More",
+        sub: "Open another page",
+        page: "index.html",
+        offset: { x: -1.6, y: -1.2, z: 1.4 },
+        scale: 1,
+        color: 0x8a0326,
+      },
+    ];
+
+    const portalSpheres = [];
+    const portalRings = [];
+
+    portalConfigs.forEach((cfg, i) => {
+      const sphere = buildPortalSphere(cfg);
+      portalSpheres.push(sphere);
+
+      // Orbiting ring
+      const ring = buildPortalRing({
+        center: { x: cfg.offset.x, y: cfg.offset.y, z: cfg.offset.z },
+        radius: 0.35,
+        color: cfg.color,
+        speed: 0.8 + i * 0.3,
+      });
+      portalRings.push(ring);
+
+      // Tiny stardust sparkles around each portal
+      const sparkleCount = 20 + Math.floor(i * 5);
+      const sparkGeo = new THREE.BufferGeometry();
+      const sparkPos = new Float32Array(sparkleCount * 3);
+      const sparkSca = new Float32Array(sparkleCount);
+      for (let j = 0; j < sparkleCount; j++) {
+        const angle = rand(0, Math.PI * 2);
+        const dist = rand(0.25, 0.7);
+        sparkPos[j * 3] = Math.cos(angle) * dist;
+        sparkPos[j * 3 + 1] = Math.abs(Math.sin(angle)) * dist * 0.3 + 0.05;
+        sparkPos[j * 3 + 2] = Math.sin(angle) * dist * 0.5;
+        sparkSca[j] = rand(0.1, 0.3);
+      }
+      sparkGeo.setAttribute("position", new THREE.BufferAttribute(sparkPos, 3));
+      const sparkMat = new THREE.PointsMaterial({
+        color: cfg.color,
+        size: 0.02,
+        transparent: true,
+        opacity: 0.7,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const sparkPoints = new THREE.Points(sparkGeo, sparkMat);
+      sphere.add(sparkPoints);
+      sparkPoints.userData.angle = 0;
+    });
+
+    // ── Interactive 3D Portals ───────────────────────────────────────
+    // Create HTML overlays for each portal sphere and position them
+    // at the screen-space location of the 3D sphere.
+    portalSpheres.forEach((sphere, i) => {
+      const overlay = document.createElement("div");
+      overlay.className = "portal-overlay";
+      overlay.innerHTML =
+        '<div class="portal-card portal-box">' +
+        '<span class="portal-icon">' + sphere.userData.icon + '</span>' +
+        '<div class="portal-title">' + sphere.userData.title + '</div>' +
+        '<div class="portal-sub">' + sphere.userData.sub + '</div>' +
+        '</div>' +
+        '<div class="portal-sphere portal-dot"></div>';
+
+      // Attach the page data to the overlay
+      overlay.dataset.page = sphere.userData.page;
+      overlay.dataset.icon = sphere.userData.icon;
+      overlay.dataset.title = sphere.userData.title;
+      overlay.dataset.sub = sphere.userData.sub;
+
+      // Position over the sphere (projected to screen space)
+      const pos = projectToScreen(sphere.position);
+      overlay.style.left = pos.x + "px";
+      overlay.style.top = pos.y + "px";
+
+      // Make overlay clickable (pointer events)
+      overlay.style.pointerEvents = "auto";
+      overlay.style.cursor = "pointer";
+      overlay.style.zIndex = "999";
+      overlay.style.position = "fixed";
+
+      // Add click handler to the overlay (or use document-level)
+      overlay.addEventListener("click", () => {
+        window.openPage(sphere.userData.page, {
+          icon: sphere.userData.icon,
+          title: sphere.userData.title,
+          sub: sphere.userData.sub,
+        });
+      });
+
+      // Insert into document body (above the canvas)
+      document.body.appendChild(overlay);
+
+      // Store the overlay on the sphere for later updates
+      sphere.userData.overlay = overlay;
+      portalSpheres[i].userData.overlay = overlay;
+    });
+
+    // Update portals on window resize
+    window.addEventListener("resize", () => {
+      portalSpheres.forEach((sphere) => {
+        if (sphere.userData.overlay) {
+          const pos = projectToScreen(sphere.position);
+          sphere.userData.overlay.style.left = pos.x + "px";
+          sphere.userData.overlay.style.top = pos.y + "px";
+        }
+      });
+    });
+
     // Clock
     clock = new THREE.Clock();
 
@@ -385,6 +616,22 @@
       starField.position.z = Math.cos(time * 0.017) * 0.15;
     }
 
+    // Portal spheres: gentle bob + pulse
+    if (portalSpheres.length) {
+      portalSpheres.forEach((sphere, i) => {
+        const bob = 0.12 * Math.sin(time * 0.7 + i * 1.2);
+        sphere.position.y += bob * dt * 2;
+        const pulse = 1 + 0.08 * Math.sin(time * 1.2 + i);
+        sphere.scale.set(pulse, pulse, pulse);
+        // Ring rotation
+        const ring = sphere.parent?.querySelector?.(".portal-ring");
+        if (ring) {
+          ring.userData.angle += dt * ring.userData.speed;
+          ring.rotation.z = ring.userData.angle;
+        }
+      });
+    }
+
     // Orbiting floaters
     if (floaters.length) {
       const radius = 2.4;
@@ -413,5 +660,49 @@
       requestAnimationFrame(probe);
     }
   };
+  // ── Page navigation ──────────────────────────────────────────────────
+  // Centralize page navigation for the 3D galaxy portals. Each page's
+  // own three-scene.js builds into its own #galaxyScene element.
+  window.openPage = (page, { icon, title, sub } = {}) => {
+    const currentGalaxy = document.getElementById("galaxyScene");
+    const targetGalaxy = document.getElementById("galaxyScene");
+
+    if (currentGalaxy && targetGalaxy && currentGalaxy === targetGalaxy) {
+      // Same galaxy page — do the cross-fade between pages by swapping content.
+      const overlay = document.getElementById("entryOverlay");
+      const card = document.getElementById("entryCard");
+      if (overlay && card) {
+        overlay.style.display = "flex";
+        card.style.opacity = "0";
+        card.style.transform = "translateY(24px) scale(0.92)";
+        void card.offsetHeight;
+        card.style.transition =
+          "opacity 1s ease-out, transform 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0) scale(1)";
+      }
+      setTimeout(() => {
+        if (overlay) overlay.style.display = "none";
+      }, 1200);
+
+      // Update floaters with context-appropriate labels
+      const floatersEl = document.getElementById("floaters");
+      if (floatersEl) {
+        const labels = {
+          letters: ["Happy Birthday", "You're Magic", "My Eternal Love", "I Adore You", "Always Together", "Mi Amor"],
+          memories: ["The Day We Met", "A Love Moment", "Our Trip", "Ordinary Tuesday", "A Quiet Evening", "Our Song"],
+        };
+        const list = labels[page] || ["Love", "Life", "Stars", "You", "Forever", "Us"];
+        const items = floatersEl.querySelectorAll(".floater");
+        items.forEach((el, i) => { el.dataset.text = list[i] || "Love"; });
+      }
+    } else {
+      // Navigate to a new page via anchor
+      const link = document.createElement("a");
+      link.href = page;
+      link.click();
+    }
+  };
+
   probe();
 })();
