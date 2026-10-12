@@ -313,6 +313,9 @@ em { font-style: italic; }
 }
 
 /* ── 11. UNIVERSE / GALAXY SCENE ───────────────────────────────────── */
+/* The Three.js canvas container. pointer-events: none so the galaxy
+ * stays visually interactive but doesn't block the HTML portal
+ * overlays and music widget on top of it. */
 .galaxy-scene {
   position: fixed;
   inset: 0;
@@ -1051,14 +1054,6 @@ em { font-style: italic; }
 .galaxy-scene .portal-overlay {
   pointer-events: none;
 }
-.galaxy-scene {
-  pointer-events: none;
-}
-.galaxy-scene canvas { pointer-events: none; }
-
-
-
-/* ── Interactive 3D Portals ───────────────────────────────────────────── */
 /* Clickable 3D elements that float in the galaxy. Each opens a
  * letters / memories / extra page through the existing npm navigation. */
 .portal-overlay {
@@ -1196,13 +1191,6 @@ em { font-style: italic; }
 .galaxy-scene .portal-overlay {
   pointer-events: none;
 }
-.galaxy-scene {
-  pointer-events: none;
-}
-.galaxy-scene canvas { pointer-events: none; }
-/* ── Responsive ─────────────────────────────────────────────────────── */
-@media (max-width: 720px) {
-  .galaxy-scene { background: radial-gradient(ellipse at 50% 50%, var(--bg-primary-2) 0%, var(--bg-deep) 70%, var(--bg-deep) 100%); }
   .entry-card { padding: var(--space-8) var(--space-5); }
   .entry-title { font-size: clamp(1.8rem, 5vw, 2.6rem); }
   .memory-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); }

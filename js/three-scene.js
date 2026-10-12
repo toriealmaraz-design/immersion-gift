@@ -38,7 +38,18 @@
   const MAGENTA = 0xff1493;
   const STARDUST_WHITE = 0xf0f0f0;
 
-  // Camera is positioned at z=6.2, lookAt origin. Particles near z=3.5 are the
+  // Normalize hex colors to 0-1 range for three.js vertex colors
+  const PINK_R = ((PINK >> 16) & 0xff) / 255;
+  const PINK_G = ((PINK >> 8) & 0xff) / 255;
+  const PINK_B = (PINK & 0xff) / 255;
+
+  const MAGENTA_R = ((MAGENTA >> 16) & 0xff) / 255;
+  const MAGENTA_G = ((MAGENTA >> 8) & 0xff) / 255;
+  const MAGENTA_B = (MAGENTA & 0xff) / 255;
+
+  const STARDUST_R = ((STARDUST_WHITE >> 16) & 0xff) / 255;
+  const STARDUST_G = ((STARDUST_WHITE >> 8) & 0xff) / 255;
+  const STARDUST_B = (STARDUST_WHITE & 0xff) / 255;
   // sharpest focal plane; we simulate a shallow depth-of-field feel by scaling
   // particle sizes inversely with distance from that plane (no postprocessing passthrough
   // dependencies — pure geometry-level faux-DoF).
@@ -80,9 +91,9 @@
       // Radial gradient toward core: brighter near center
       const t = Math.min(r / (SIZE * 0.9), 1);
       const base = 0.25 + 0.75 * (1 - t);
-      col[i * 3] = PINK * base;
-      col[i * 3 + 1] = MAGENTA * base * 0.85;
-      col[i * 3 + 2] = base * 0.3;
+      col[i * 3] = PINK_R * base;
+      col[i * 3 + 1] = PINK_G * base;
+      col[i * 3 + 2] = PINK_B * base;
 
       sca[i] = (rand(0.25, 0.6) * getDepthScale({ z: pos[i * 3 + 2] }));
       eff[i] = 0.35 + 0.65 * (1 - t);
@@ -120,9 +131,9 @@
       pos[i * 3 + 2] = Math.sin(phi) * rad * 0.55;
 
       const base = 0.9 - 0.7 * (1 - Math.min(rad / (SIZE * 0.65), 1));
-      col[i * 3] = PINK * base;
-      col[i * 3 + 1] = MAGENTA * base * 0.9;
-      col[i * 3 + 2] = 0x332244 * base;
+      col[i * 3] = PINK_R * base;
+      col[i * 3 + 1] = PINK_G * base * 0.9;
+      col[i * 3 + 2] = PINK_B * base * 0.8;
 
       sca[i] = (rand(0.15, 0.5) * getDepthScale({ z: pos[i * 3 + 2] }));
       eff[i] = 0.85 + 0.15 * Math.sin(theta * 3 + i * 0.01);
@@ -154,9 +165,9 @@
       pos[i * 3 + 2] = Math.sin(phi) * r * 0.6;
 
       const bright = rand(0.5, 1);
-      col[i * 3] = PINK * bright;
-      col[i * 3 + 1] = MAGENTA * bright * 0.9;
-      col[i * 3 + 2] = STARDUST_WHITE * bright * 0.5;
+      col[i * 3] = PINK_R * bright;
+      col[i * 3 + 1] = PINK_G * bright * 0.9;
+      col[i * 3 + 2] = PINK_B * bright * 0.7;
 
       sca[i] = (rand(0.6, 1.6) * getDepthScale({ z: pos[i * 3 + 2] }));
       rot[i] = rand(0, Math.PI * 2);
@@ -587,9 +598,8 @@
       }
       // Remove inbound event to avoid repeated teardown
       window.removeEventListener("resize", onResize);
-      // Re-enable the entry overlay
-      const overlay = document.getElementById("entryOverlay");
-      if (overlay) overlay.style.display = "block";
+      // Remove inbound event listener (anonymous, added inline)
+      window.removeEventListener("resize", function () {});
     };
 
     tick();
